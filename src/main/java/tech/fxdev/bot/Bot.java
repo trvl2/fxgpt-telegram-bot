@@ -1,5 +1,6 @@
 package tech.fxdev.bot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -7,6 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import tech.fxdev.bot.config.BotConfig;
 
+@Slf4j
 @Component
 public class Bot extends TelegramLongPollingBot {
 
@@ -34,9 +36,32 @@ public class Bot extends TelegramLongPollingBot {
 
             switch(messageFromUser) {
                 case "/start":
+                    log.info("Received /start from User [" + update.getMessage().getFrom().getId() + "]");
                     startCommandReceived(chatId);
                     break;
+
+                case "/subscription":
+                    log.info("Received /subscription from User [" + update.getMessage().getFrom().getId() + "]");
+                    subscriptionCommandReceived(chatId);
+                    break;
+
+                case "/settings":
+                    log.info("Received /settings from User [" + update.getMessage().getFrom().getId() + "]");
+                    settingsCommandReceived(chatId);
+                    break;
+
+                case "/newthread":
+                    log.info("Received /newthread from User [" + update.getMessage().getFrom().getId() + "]");
+                    newthreadCommandReceived(chatId);
+                    break;
+
+                case "/allthreads":
+                    log.info("Received /allthreads from User [" + update.getMessage().getFrom().getId() + "]");
+                    allthreadsCommandReceived(chatId);
+                    break;
+
                 default:
+                    log.info("Received message from User [" + update.getMessage().getFrom().getId() + "] [" + update.getMessage().getText() + "]");
                     repeatMessage(chatId, messageFromUser);
                     break;
             }
@@ -45,6 +70,30 @@ public class Bot extends TelegramLongPollingBot {
 
     private void startCommandReceived(long chatId) {
         String answer = "Hi, welcome to FxGpt bot!";
+
+        sendMessage(chatId, answer);
+    }
+
+    private void subscriptionCommandReceived(long chatId) {
+        String answer = "Subscription section will be implemented in the future";
+
+        sendMessage(chatId, answer);
+    }
+
+    private void settingsCommandReceived(long chatId) {
+        String answer = "Settings section will be implemented in the future";
+
+        sendMessage(chatId, answer);
+    }
+
+    private void newthreadCommandReceived(long chatId) {
+        String answer = "Threads section will be implemented in the future";
+
+        sendMessage(chatId, answer);
+    }
+
+    private void allthreadsCommandReceived(long chatId) {
+        String answer = "Chat section will be implemented in the future";
 
         sendMessage(chatId, answer);
     }
@@ -62,7 +111,7 @@ public class Bot extends TelegramLongPollingBot {
             execute(message);
 
         } catch (TelegramApiException e) {
-            // TODO logs
+            log.error("Telegram API error while executing response message: " + e.getMessage());
 
         }
     }
